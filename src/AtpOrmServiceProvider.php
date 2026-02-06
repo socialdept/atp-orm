@@ -13,7 +13,7 @@ class AtpOrmServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/orm.php', 'atp-orm');
+        $this->mergeConfigFrom(__DIR__.'/../config/atp-orm.php', 'atp-orm');
 
         $this->app->singleton(CacheKeyGenerator::class, function () {
             return new CacheKeyGenerator(config('atp-orm.cache.prefix', 'atp-orm'));
@@ -71,7 +71,7 @@ class AtpOrmServiceProvider extends ServiceProvider
     protected function bootForConsole(): void
     {
         $this->publishes([
-            __DIR__.'/../config/orm.php' => config_path('atp-orm.php'),
+            __DIR__.'/../config/atp-orm.php' => config_path('atp-orm.php'),
         ], 'atp-orm-config');
 
         $this->publishes([
