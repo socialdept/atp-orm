@@ -17,7 +17,7 @@ class RecordClassResolver
             ->implode('\\');
 
         // 1. Check app lexicons namespace first
-        $appNamespace = config('schema.lexicons.base_namespace', 'App\\Lexicons');
+        $appNamespace = config('atp-orm.generated.app_namespace', 'App\\Lexicons');
         $appClass = $appNamespace.'\\'.$classPath;
 
         if (class_exists($appClass)) {
@@ -25,7 +25,7 @@ class RecordClassResolver
         }
 
         // 2. Check pre-generated namespace
-        $generatedNamespace = config('schema.generated.namespace', 'SocialDept\\AtpSchema\\Generated');
+        $generatedNamespace = config('atp-orm.generated.schema_namespace', 'SocialDept\\AtpSchema\\Generated');
         $generatedClass = $generatedNamespace.'\\'.$classPath;
 
         if (class_exists($generatedClass)) {

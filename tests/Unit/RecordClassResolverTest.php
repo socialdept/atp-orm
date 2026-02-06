@@ -23,8 +23,8 @@ class RecordClassResolverTest extends TestCase
 
     public function test_app_namespace_checked_before_generated(): void
     {
-        config()->set('schema.lexicons.base_namespace', 'SocialDept\\AtpSchema\\Generated');
-        config()->set('schema.generated.namespace', 'NonExistent\\Namespace');
+        config()->set('atp-orm.generated.app_namespace', 'SocialDept\\AtpSchema\\Generated');
+        config()->set('atp-orm.generated.schema_namespace', 'NonExistent\\Namespace');
 
         $result = RecordClassResolver::resolve('app.bsky.feed.post');
 
@@ -33,8 +33,8 @@ class RecordClassResolverTest extends TestCase
 
     public function test_falls_through_to_generated_namespace(): void
     {
-        config()->set('schema.lexicons.base_namespace', 'NonExistent\\AppNamespace');
-        config()->set('schema.generated.namespace', 'SocialDept\\AtpSchema\\Generated');
+        config()->set('atp-orm.generated.app_namespace', 'NonExistent\\AppNamespace');
+        config()->set('atp-orm.generated.schema_namespace', 'SocialDept\\AtpSchema\\Generated');
 
         $result = RecordClassResolver::resolve('app.bsky.feed.post');
 

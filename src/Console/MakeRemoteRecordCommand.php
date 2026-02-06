@@ -80,7 +80,7 @@ class MakeRemoteRecordCommand extends Command
         }
 
         // Fall back to the pre-generated namespace convention
-        $generatedNamespace = config('schema.generated.namespace', 'SocialDept\\AtpSchema\\Generated');
+        $generatedNamespace = config('atp-orm.generated.schema_namespace', 'SocialDept\\AtpSchema\\Generated');
         $classPath = collect(explode('.', $collection))
             ->map(fn (string $part) => Str::studly($part))
             ->implode('\\');
