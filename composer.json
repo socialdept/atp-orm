@@ -24,9 +24,10 @@
         "socialdept/atp-resolver": "^1.1"
     },
     "require-dev": {
+        "mockery/mockery": "^1.6",
         "orchestra/testbench": "^9.0|^10.0",
         "phpunit/phpunit": "^11.0",
-        "mockery/mockery": "^1.6"
+        "socialdept/atp-signals": "^1.2"
     },
     "suggest": {
         "socialdept/atp-signals": "Enables automatic cache invalidation via firehose/jetstream and CAR-based bulk loading via getRepo (^1.2)"

@@ -268,11 +268,11 @@ class Builder
         $client = $this->publicClient($pds);
 
         $response = $client->atproto->repo->listRecords(
-            repo: $this->did,
-            collection: $collection,
-            limit: $params['limit'],
-            cursor: $params['cursor'],
-            reverse: $params['reverse'],
+            $this->did,
+            $collection,
+            $params['limit'],
+            $params['cursor'],
+            $params['reverse'],
         );
 
         $hydrator = $this->hydrator();
@@ -338,7 +338,7 @@ class Builder
         return $pds ?? config('atp-orm.pds.public_service', 'https://public.api.bsky.app');
     }
 
-    protected function publicClient(string $pds): AtpClient
+    protected function publicClient(string $pds): mixed
     {
         return static::$clientCache[$pds] ??= Atp::public($pds);
     }
