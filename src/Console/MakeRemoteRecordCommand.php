@@ -4,6 +4,7 @@ namespace SocialDept\AtpOrm\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
+use SocialDept\AtpOrm\Support\RecordClassResolver;
 
 class MakeRemoteRecordCommand extends Command
 {
@@ -25,7 +26,7 @@ class MakeRemoteRecordCommand extends Command
         $stub = str_replace('{{ namespace }}', $namespace, $stub);
         $stub = str_replace('{{ class }}', $name, $stub);
         $stub = str_replace('{{ collection }}', $collection, $stub);
-        $stub = str_replace('{{ recordClass }}', $this->collectionToRecordClass($collection), $stub);
+        $stub = str_replace('{{ recordClass }}', $this->resolveRecordClass($collection), $stub);
 
         $filePath = base_path($path.'/'.$name.'.php');
 
@@ -70,10 +71,20 @@ class MakeRemoteRecordCommand extends Command
         return str_replace('/', '\\', Str::studly($path));
     }
 
-    protected function collectionToRecordClass(string $collection): string
+    protected function resolveRecordClass(string $collection): string
     {
-        return collect(explode('.', $collection))
+        $resolved = RecordClassResolver::resolve($collection);
+
+        if ($resolved) {
+            return $resolved;
+        }
+
+        // Fall back to the pre-generated namespace convention
+        $generatedNamespace = config('schema.generated.namespace', 'SocialDept\\AtpSchema\\Generated');
+        $classPath = collect(explode('.', $collection))
             ->map(fn (string $part) => Str::studly($part))
             ->implode('\\');
+
+        return $generatedNamespace.'\\'.$classPath;
     }
 }
