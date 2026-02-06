@@ -1,0 +1,60 @@
+{
+    "name": "socialdept/atp-orm",
+    "description": "Eloquent-like ORM for AT Protocol remote records in Laravel",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "atproto",
+        "bluesky",
+        "at-protocol",
+        "orm",
+        "laravel"
+    ],
+    "authors": [
+        {
+            "name": "SocialDept",
+            "email": "hello@socialdept.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^11.0|^12.0",
+        "socialdept/atp-client": "^0.0",
+        "socialdept/atp-schema": "^0.3",
+        "socialdept/atp-resolver": "^1.1"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.0|^10.0",
+        "phpunit/phpunit": "^11.0",
+        "mockery/mockery": "^1.6"
+    },
+    "suggest": {
+        "socialdept/atp-signals": "Enables automatic cache invalidation via firehose/jetstream and CAR-based bulk loading via getRepo (^1.2)"
+    },
+    "autoload": {
+        "psr-4": {
+            "SocialDept\\AtpOrm\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SocialDept\\AtpOrm\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SocialDept\\AtpOrm\\AtpOrmServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    }
+}
