@@ -4,7 +4,6 @@ namespace SocialDept\AtpOrm\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use SocialDept\AtpOrm\Exceptions\ReadOnlyException;
-use SocialDept\AtpOrm\Support\AtUri;
 use SocialDept\AtpOrm\Tests\Fixtures\FakePost;
 use SocialDept\AtpOrm\Tests\Fixtures\FakePostData;
 
@@ -12,7 +11,7 @@ class RemoteRecordTest extends TestCase
 {
     public function test_collection_and_record_class(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
 
         $this->assertSame('app.bsky.feed.post', $post->getCollection());
         $this->assertSame(FakePostData::class, $post->getRecordClass());
@@ -20,7 +19,7 @@ class RemoteRecordTest extends TestCase
 
     public function test_set_and_get_did(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $post->setDid('did:plc:abc');
 
         $this->assertSame('did:plc:abc', $post->getDid());
@@ -28,7 +27,7 @@ class RemoteRecordTest extends TestCase
 
     public function test_set_uri_extracts_did_and_rkey(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $post->setUri('at://did:plc:abc/app.bsky.feed.post/rkey123');
 
         $this->assertSame('did:plc:abc', $post->getDid());
@@ -38,14 +37,14 @@ class RemoteRecordTest extends TestCase
 
     public function test_exists_defaults_to_false(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
 
         $this->assertFalse($post->exists());
     }
 
     public function test_set_exists(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $post->setExists(true);
 
         $this->assertTrue($post->exists());
@@ -53,7 +52,7 @@ class RemoteRecordTest extends TestCase
 
     public function test_set_record(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $data = FakePostData::fromArray([
             'text' => 'Hello',
             'createdAt' => '2024-01-01T00:00:00Z',
@@ -66,7 +65,7 @@ class RemoteRecordTest extends TestCase
 
     public function test_to_dto(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $data = FakePostData::fromArray([
             'text' => 'Hello',
             'createdAt' => '2024-01-01T00:00:00Z',
@@ -80,7 +79,7 @@ class RemoteRecordTest extends TestCase
 
     public function test_to_dto_with_dirty(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $data = FakePostData::fromArray([
             'text' => 'Hello',
             'createdAt' => '2024-01-01T00:00:00Z',
@@ -95,7 +94,7 @@ class RemoteRecordTest extends TestCase
 
     public function test_to_array(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $data = FakePostData::fromArray([
             'text' => 'Hello',
             'createdAt' => '2024-01-01T00:00:00Z',
@@ -109,7 +108,7 @@ class RemoteRecordTest extends TestCase
 
     public function test_to_json(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $data = FakePostData::fromArray([
             'text' => 'Hello',
             'createdAt' => '2024-01-01T00:00:00Z',
@@ -123,7 +122,7 @@ class RemoteRecordTest extends TestCase
 
     public function test_array_access(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $data = FakePostData::fromArray([
             'text' => 'Hello',
             'createdAt' => '2024-01-01T00:00:00Z',
@@ -143,7 +142,7 @@ class RemoteRecordTest extends TestCase
 
     public function test_json_serializable(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $data = FakePostData::fromArray([
             'text' => 'Hello',
             'createdAt' => '2024-01-01T00:00:00Z',
@@ -157,7 +156,7 @@ class RemoteRecordTest extends TestCase
 
     public function test_save_without_auth_throws(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
 
         $this->expectException(ReadOnlyException::class);
         $post->save();
@@ -165,7 +164,7 @@ class RemoteRecordTest extends TestCase
 
     public function test_delete_without_auth_throws(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
 
         $this->expectException(ReadOnlyException::class);
         $post->delete();
@@ -173,7 +172,7 @@ class RemoteRecordTest extends TestCase
 
     public function test_delete_nonexistent_returns_false(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $post->setAuthenticatedDid('did:plc:abc');
 
         $this->assertFalse($post->delete());
@@ -181,14 +180,14 @@ class RemoteRecordTest extends TestCase
 
     public function test_cache_ttl(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
 
         $this->assertSame(300, $post->getCacheTtl());
     }
 
     public function test_set_cid(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $post->setCid('bafyreigz');
 
         $this->assertSame('bafyreigz', $post->getCid());
@@ -196,7 +195,7 @@ class RemoteRecordTest extends TestCase
 
     public function test_authenticated_did(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $this->assertNull($post->getAuthenticatedDid());
 
         $post->setAuthenticatedDid('did:plc:auth');

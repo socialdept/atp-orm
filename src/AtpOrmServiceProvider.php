@@ -24,7 +24,7 @@ class AtpOrmServiceProvider extends ServiceProvider
         $this->app->singleton(CacheProvider::class, function () {
             $providerClass = config('atp-orm.cache_provider');
 
-            return new $providerClass;
+            return new $providerClass();
         });
 
         $this->registerRepoLoader();

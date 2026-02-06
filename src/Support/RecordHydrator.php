@@ -3,9 +3,9 @@
 namespace SocialDept\AtpOrm\Support;
 
 use SocialDept\AtpClient\Data\Responses\Atproto\Repo\ListRecordsResponse;
+use SocialDept\AtpOrm\Events\RecordFetched;
 use SocialDept\AtpOrm\RemoteCollection;
 use SocialDept\AtpOrm\RemoteRecord;
-use SocialDept\AtpOrm\Events\RecordFetched;
 
 class RecordHydrator
 {
@@ -19,7 +19,7 @@ class RecordHydrator
         ?string $cid = null,
         ?string $authDid = null,
     ): RemoteRecord {
-        $instance = new $class;
+        $instance = new $class();
         $recordClass = $instance->getRecordClass();
         $record = $recordClass::fromArray($rawValue);
 
@@ -67,7 +67,7 @@ class RecordHydrator
         string $did,
         ?string $authDid = null,
     ): RemoteCollection {
-        $instance = new $class;
+        $instance = new $class();
         $collection = $instance->getCollection();
 
         $items = [];

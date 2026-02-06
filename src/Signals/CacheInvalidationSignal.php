@@ -4,7 +4,6 @@ namespace SocialDept\AtpOrm\Signals;
 
 use SocialDept\AtpOrm\Cache\CacheKeyGenerator;
 use SocialDept\AtpOrm\Contracts\CacheProvider;
-use SocialDept\AtpOrm\Support\AtUri;
 use SocialDept\AtpSignals\Events\SignalEvent;
 use SocialDept\AtpSignals\Signals\Signal;
 
@@ -13,7 +12,8 @@ class CacheInvalidationSignal extends Signal
     public function __construct(
         protected CacheProvider $cache,
         protected CacheKeyGenerator $keyGenerator,
-    ) {}
+    ) {
+    }
 
     public function eventTypes(): array
     {

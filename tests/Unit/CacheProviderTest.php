@@ -12,14 +12,14 @@ class CacheProviderTest extends TestCase
 
     public function test_array_provider_get_returns_null_when_empty(): void
     {
-        $cache = new ArrayCacheProvider;
+        $cache = new ArrayCacheProvider();
 
         $this->assertNull($cache->get('nonexistent'));
     }
 
     public function test_array_provider_put_and_get(): void
     {
-        $cache = new ArrayCacheProvider;
+        $cache = new ArrayCacheProvider();
         $cache->put('key1', 'value1', 60);
 
         $this->assertSame('value1', $cache->get('key1'));
@@ -27,7 +27,7 @@ class CacheProviderTest extends TestCase
 
     public function test_array_provider_has(): void
     {
-        $cache = new ArrayCacheProvider;
+        $cache = new ArrayCacheProvider();
         $cache->put('key1', 'value1', 60);
 
         $this->assertTrue($cache->has('key1'));
@@ -36,7 +36,7 @@ class CacheProviderTest extends TestCase
 
     public function test_array_provider_forget(): void
     {
-        $cache = new ArrayCacheProvider;
+        $cache = new ArrayCacheProvider();
         $cache->put('key1', 'value1', 60);
         $cache->forget('key1');
 
@@ -45,7 +45,7 @@ class CacheProviderTest extends TestCase
 
     public function test_array_provider_flush_by_prefix(): void
     {
-        $cache = new ArrayCacheProvider;
+        $cache = new ArrayCacheProvider();
         $cache->put('prefix:a', 'val1', 60);
         $cache->put('prefix:b', 'val2', 60);
         $cache->put('other:c', 'val3', 60);
@@ -59,7 +59,7 @@ class CacheProviderTest extends TestCase
 
     public function test_array_provider_expired_entries_return_null(): void
     {
-        $cache = new ArrayCacheProvider;
+        $cache = new ArrayCacheProvider();
         $cache->put('key1', 'value1', -1); // Already expired
 
         $this->assertNull($cache->get('key1'));
@@ -67,7 +67,7 @@ class CacheProviderTest extends TestCase
 
     public function test_array_provider_stores_complex_values(): void
     {
-        $cache = new ArrayCacheProvider;
+        $cache = new ArrayCacheProvider();
         $value = ['nested' => ['data' => true], 'count' => 42];
         $cache->put('key1', $value, 60);
 

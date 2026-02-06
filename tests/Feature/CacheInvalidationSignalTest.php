@@ -21,7 +21,7 @@ class CacheInvalidationSignalTest extends TestCase
     {
         parent::setUp();
 
-        $this->cache = new ArrayCacheProvider;
+        $this->cache = new ArrayCacheProvider();
         $this->keyGen = new CacheKeyGenerator('atp-orm');
         $this->signal = new CacheInvalidationSignal($this->cache, $this->keyGen);
     }

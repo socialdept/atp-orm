@@ -8,5 +8,6 @@ class RecordCreated
 {
     public function __construct(
         public readonly RemoteRecord $record,
-    ) {}
+    ) {
+    }
 }

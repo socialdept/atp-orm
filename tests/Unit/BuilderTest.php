@@ -24,7 +24,7 @@ class BuilderTest extends TestCase
     {
         parent::setUp();
 
-        $this->cache = new ArrayCacheProvider;
+        $this->cache = new ArrayCacheProvider();
         $this->app->instance(CacheProvider::class, $this->cache);
 
         // Clear static client cache between tests
@@ -47,13 +47,13 @@ class BuilderTest extends TestCase
     {
         $repoClient = Mockery::mock();
 
-        $fakeAtproto = new \stdClass;
+        $fakeAtproto = new \stdClass();
         $fakeAtproto->repo = $repoClient;
 
-        $fakeClient = new \stdClass;
+        $fakeClient = new \stdClass();
         $fakeClient->atproto = $fakeAtproto;
 
-        $manager = new class($fakeClient) {
+        $manager = new class ($fakeClient) {
             private object $client;
 
             public function __construct(object $client)

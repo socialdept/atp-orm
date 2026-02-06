@@ -6,7 +6,6 @@ use SocialDept\AtpClient\Data\Responses\Atproto\Repo\ListRecordsResponse;
 use SocialDept\AtpOrm\RemoteCollection;
 use SocialDept\AtpOrm\Support\RecordHydrator;
 use SocialDept\AtpOrm\Tests\Fixtures\FakePost;
-use SocialDept\AtpOrm\Tests\Fixtures\FakePostData;
 use SocialDept\AtpOrm\Tests\TestCase;
 
 class RecordHydratorTest extends TestCase
@@ -16,7 +15,7 @@ class RecordHydratorTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->hydrator = new RecordHydrator;
+        $this->hydrator = new RecordHydrator();
     }
 
     public function test_hydrate_one(): void

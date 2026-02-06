@@ -8,5 +8,6 @@ class RecordDeleted
 {
     public function __construct(
         public readonly RemoteRecord $record,
-    ) {}
+    ) {
+    }
 }

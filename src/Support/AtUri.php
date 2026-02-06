@@ -10,7 +10,8 @@ class AtUri implements Stringable
         public readonly string $did,
         public readonly string $collection,
         public readonly string $rkey,
-    ) {}
+    ) {
+    }
 
     public static function parse(string $uri): ?static
     {

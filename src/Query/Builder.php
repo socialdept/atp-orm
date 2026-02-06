@@ -118,7 +118,7 @@ class Builder
 
     public function get(): RemoteCollection
     {
-        $instance = new $this->remoteRecordClass;
+        $instance = new $this->remoteRecordClass();
         $collection = $instance->getCollection();
 
         if ($this->useRepo) {
@@ -130,7 +130,7 @@ class Builder
 
     public function find(string $rkey): ?RemoteRecord
     {
-        $instance = new $this->remoteRecordClass;
+        $instance = new $this->remoteRecordClass();
         $collection = $instance->getCollection();
 
         $cache = $this->cacheProvider();
@@ -179,7 +179,8 @@ class Builder
         $record = $this->find($rkey);
 
         if (! $record) {
-            $instance = new $this->remoteRecordClass;
+            $instance = new $this->remoteRecordClass();
+
             throw new RecordNotFoundException($instance->getCollection(), $this->did, $rkey);
         }
 
@@ -203,7 +204,7 @@ class Builder
             throw new ReadOnlyException('create');
         }
 
-        $instance = new $this->remoteRecordClass;
+        $instance = new $this->remoteRecordClass();
         $collection = $instance->getCollection();
         $recordClass = $instance->getRecordClass();
 
@@ -238,7 +239,7 @@ class Builder
 
     public function invalidate(): void
     {
-        $instance = new $this->remoteRecordClass;
+        $instance = new $this->remoteRecordClass();
         $collection = $instance->getCollection();
 
         $this->invalidateScope($collection);
@@ -349,7 +350,7 @@ class Builder
             return $this->customTtl;
         }
 
-        $instance = new $this->remoteRecordClass;
+        $instance = new $this->remoteRecordClass();
         $modelTtl = $instance->getCacheTtl();
 
         if ($modelTtl > 0) {

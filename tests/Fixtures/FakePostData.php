@@ -10,7 +10,8 @@ class FakePostData extends Data
         public readonly string $text,
         public readonly string $createdAt,
         public readonly ?array $langs = null,
-    ) {}
+    ) {
+    }
 
     public static function getLexicon(): string
     {

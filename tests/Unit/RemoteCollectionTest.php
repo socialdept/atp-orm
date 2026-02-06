@@ -11,7 +11,7 @@ class RemoteCollectionTest extends TestCase
 {
     private function makePost(string $text, string $rkey): FakePost
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $data = FakePostData::fromArray([
             'text' => $text,
             'createdAt' => '2024-01-01T00:00:00Z',

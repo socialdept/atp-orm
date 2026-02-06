@@ -10,7 +10,7 @@ class HasAttributesTest extends TestCase
 {
     public function test_get_attribute_from_record(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $data = FakePostData::fromArray([
             'text' => 'Hello world',
             'createdAt' => '2024-01-01T00:00:00Z',
@@ -23,7 +23,7 @@ class HasAttributesTest extends TestCase
 
     public function test_set_attribute_marks_dirty(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $data = FakePostData::fromArray([
             'text' => 'Hello',
             'createdAt' => '2024-01-01T00:00:00Z',
@@ -41,7 +41,7 @@ class HasAttributesTest extends TestCase
 
     public function test_dirty_overrides_original(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $data = FakePostData::fromArray([
             'text' => 'Original',
             'createdAt' => '2024-01-01T00:00:00Z',
@@ -56,7 +56,7 @@ class HasAttributesTest extends TestCase
 
     public function test_get_dirty_returns_only_changed(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $data = FakePostData::fromArray([
             'text' => 'Hello',
             'createdAt' => '2024-01-01T00:00:00Z',
@@ -70,7 +70,7 @@ class HasAttributesTest extends TestCase
 
     public function test_get_merged_attributes(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $data = FakePostData::fromArray([
             'text' => 'Hello',
             'createdAt' => '2024-01-01T00:00:00Z',
@@ -86,7 +86,7 @@ class HasAttributesTest extends TestCase
 
     public function test_sync_original_resets_dirty(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $data = FakePostData::fromArray([
             'text' => 'Hello',
             'createdAt' => '2024-01-01T00:00:00Z',
@@ -102,7 +102,7 @@ class HasAttributesTest extends TestCase
 
     public function test_magic_get_and_set(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $data = FakePostData::fromArray([
             'text' => 'Hello',
             'createdAt' => '2024-01-01T00:00:00Z',
@@ -117,7 +117,7 @@ class HasAttributesTest extends TestCase
 
     public function test_magic_isset(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $data = FakePostData::fromArray([
             'text' => 'Hello',
             'createdAt' => '2024-01-01T00:00:00Z',
@@ -130,7 +130,7 @@ class HasAttributesTest extends TestCase
 
     public function test_is_clean(): void
     {
-        $post = new FakePost;
+        $post = new FakePost();
         $data = FakePostData::fromArray([
             'text' => 'Hello',
             'createdAt' => '2024-01-01T00:00:00Z',

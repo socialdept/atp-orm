@@ -14,7 +14,7 @@ class RepoLoaderTest extends TestCase
 
     public function test_parse_car_for_collection_returns_empty_for_empty_blocks(): void
     {
-        $loader = new RepoLoader;
+        $loader = new RepoLoader();
 
         $reflection = new \ReflectionClass($loader);
         $method = $reflection->getMethod('findMstRoot');
