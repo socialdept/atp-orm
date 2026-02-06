@@ -1,0 +1,14 @@
+<?php
+
+namespace {{ namespace }};
+
+use SocialDept\AtpOrm\RemoteRecord;
+
+class {{ class }} extends RemoteRecord
+{
+    protected string $collection = '{{ collection }}';
+
+    protected string $recordClass = \SocialDept\AtpSchema\Generated\{{ recordClass }}::class;
+
+    protected int $cacheTtl = 300;
+}
