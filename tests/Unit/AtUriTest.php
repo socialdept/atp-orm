@@ -3,7 +3,7 @@
 namespace SocialDept\AtpOrm\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use SocialDept\AtpOrm\Support\AtUri;
+use SocialDept\AtpSupport\AtUri;
 
 class AtUriTest extends TestCase
 {

@@ -41,10 +41,6 @@ class AtpOrmServiceProvider extends ServiceProvider
 
     protected function registerRepoLoader(): void
     {
-        if (! class_exists(\SocialDept\AtpSignals\CAR\BlockReader::class)) {
-            return;
-        }
-
         $this->app->singleton(RepoLoader::class);
     }
 

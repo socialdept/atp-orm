@@ -56,10 +56,6 @@ return [
         'enabled' => true,
     ],
 
-    'pds' => [
-        'public_service' => env('ATP_PUBLIC_SERVICE_URL', 'https://public.api.bsky.app'),
-    ],
-
     'generators' => [
         'path' => 'app/Remote',
     ],

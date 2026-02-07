@@ -14,7 +14,7 @@ use SocialDept\AtpOrm\Query\Builder;
 use SocialDept\AtpOrm\RemoteCollection;
 use SocialDept\AtpOrm\Tests\Fixtures\FakePost;
 use SocialDept\AtpOrm\Tests\TestCase;
-use SocialDept\AtpResolver\Facades\Resolver;
+use SocialDept\AtpSupport\Facades\Resolver;
 
 class BuilderTest extends TestCase
 {

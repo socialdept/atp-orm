@@ -13,7 +13,7 @@ use SocialDept\AtpOrm\Events\RecordDeleted;
 use SocialDept\AtpOrm\Events\RecordUpdated;
 use SocialDept\AtpOrm\Exceptions\ReadOnlyException;
 use SocialDept\AtpOrm\Query\Builder;
-use SocialDept\AtpOrm\Support\AtUri;
+use SocialDept\AtpSupport\AtUri;
 use SocialDept\AtpSchema\Data\Data;
 
 /**

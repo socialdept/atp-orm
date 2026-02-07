@@ -3,7 +3,7 @@
 namespace SocialDept\AtpOrm\Support;
 
 use Illuminate\Support\Str;
-use SocialDept\AtpSchema\Support\PathHelper;
+use SocialDept\AtpSupport\PathHelper;
 
 class RecordClassResolver
 {

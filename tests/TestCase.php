@@ -5,14 +5,14 @@ namespace SocialDept\AtpOrm\Tests;
 use Orchestra\Testbench\TestCase as Orchestra;
 use SocialDept\AtpClient\AtpClientServiceProvider;
 use SocialDept\AtpOrm\AtpOrmServiceProvider;
-use SocialDept\AtpResolver\ResolverServiceProvider;
+use SocialDept\AtpSupport\AtpSupportServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
     protected function getPackageProviders($app): array
     {
         return [
-            ResolverServiceProvider::class,
+            AtpSupportServiceProvider::class,
             AtpClientServiceProvider::class,
             AtpOrmServiceProvider::class,
         ];
