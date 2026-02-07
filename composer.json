@@ -16,7 +16,7 @@
         "php": "^8.2",
         "illuminate/support": "^11.0|^12.0",
         "socialdept/atp-cbor": "^0.1",
-        "socialdept/atp-client": "^0.0",
+        "socialdept/atp-client": "^0.1",
         "socialdept/atp-schema": "^0.3",
         "socialdept/atp-support": "^0.1"
     },
@@ -24,11 +24,11 @@
         "mockery/mockery": "^1.6",
         "orchestra/testbench": "^9.0|^10.0",
         "phpunit/phpunit": "^11.0",
-        "socialdept/atp-signals": "^1.2",
+        "socialdept/atp-signals": "^2.0",
         "friendsofphp/php-cs-fixer": "^3.89"
     },
     "suggest": {
-        "socialdept/atp-signals": "Enables automatic cache invalidation via firehose/jetstream and CAR-based bulk loading via getRepo (^1.2)"
+        "socialdept/atp-signals": "Enables automatic cache invalidation via firehose/jetstream and CAR-based bulk loading via getRepo (^2.0)"
     },
     "autoload": {
         "psr-4": {
