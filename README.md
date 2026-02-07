@@ -378,13 +378,14 @@ Customize behavior in `config/atp-orm.php`:
 
 ```php
 return [
-    // Cache provider class
+    // Cache provider class (LaravelCacheProvider, FileCacheProvider, or ArrayCacheProvider)
     'cache_provider' => \SocialDept\AtpOrm\Providers\LaravelCacheProvider::class,
 
     'cache' => [
-        'default_ttl' => 300,      // 5 minutes
+        'default_ttl' => 300,      // 5 minutes (0 = no caching)
         'prefix' => 'atp-orm',
         'store' => null,           // Laravel cache store (null = default)
+        'file_path' => storage_path('app/atp-orm-cache'), // FileCacheProvider storage path
 
         // Per-collection TTL overrides
         'ttls' => [
@@ -395,7 +396,7 @@ return [
         // Automatic invalidation via firehose (requires atp-signals)
         'invalidation' => [
             'enabled' => false,
-            'collections' => null,  // null = all
+            'collections' => null,  // null = auto from registered models
             'dids' => null,         // null = all
         ],
     ],

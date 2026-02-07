@@ -8,7 +8,7 @@ class {{ class }} extends RemoteRecord
 {
     protected string $collection = '{{ collection }}';
 
-    protected string $recordClass = \SocialDept\AtpSchema\Generated\{{ recordClass }}::class;
+    protected string $recordClass = \{{ recordClass }}::class;
 
     protected int $cacheTtl = 300;
 }
