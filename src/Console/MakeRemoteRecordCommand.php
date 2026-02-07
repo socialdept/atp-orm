@@ -5,7 +5,7 @@ namespace SocialDept\AtpOrm\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use SocialDept\AtpOrm\Support\RecordClassResolver;
-use SocialDept\AtpSchema\Support\PathHelper;
+use SocialDept\AtpSupport\PathHelper;
 
 class MakeRemoteRecordCommand extends Command
 {

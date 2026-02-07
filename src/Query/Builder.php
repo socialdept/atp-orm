@@ -11,10 +11,10 @@ use SocialDept\AtpOrm\Exceptions\ReadOnlyException;
 use SocialDept\AtpOrm\Exceptions\RecordNotFoundException;
 use SocialDept\AtpOrm\RemoteCollection;
 use SocialDept\AtpOrm\RemoteRecord;
-use SocialDept\AtpOrm\Support\AtUri;
 use SocialDept\AtpOrm\Support\RecordHydrator;
-use SocialDept\AtpResolver\Facades\Resolver;
-use SocialDept\AtpResolver\Support\Identity;
+use SocialDept\AtpSupport\AtUri;
+use SocialDept\AtpSupport\Facades\Resolver;
+use SocialDept\AtpSupport\Identity;
 
 class Builder
 {
@@ -336,7 +336,7 @@ class Builder
     {
         $pds = Resolver::resolvePds($this->did);
 
-        return $pds ?? config('atp-orm.pds.public_service', 'https://public.api.bsky.app');
+        return $pds ?? config('atp-support.public_api', 'https://public.api.bsky.app');
     }
 
     protected function publicClient(string $pds): mixed

@@ -2,12 +2,12 @@
 
 namespace SocialDept\AtpOrm\Loader;
 
+use SocialDept\AtpCbor\CAR\BlockReader;
+use SocialDept\AtpCbor\CAR\RecordExtractor;
+use SocialDept\AtpCbor\Core\CBOR;
+use SocialDept\AtpCbor\Core\CID;
 use SocialDept\AtpClient\Facades\Atp;
-use SocialDept\AtpResolver\Facades\Resolver;
-use SocialDept\AtpSignals\CAR\BlockReader;
-use SocialDept\AtpSignals\CAR\RecordExtractor;
-use SocialDept\AtpSignals\Core\CBOR;
-use SocialDept\AtpSignals\Core\CID;
+use SocialDept\AtpSupport\Facades\Resolver;
 
 class RepoLoader
 {
@@ -21,7 +21,7 @@ class RepoLoader
         $pds = Resolver::resolvePds($did);
 
         if (! $pds) {
-            $pds = config('atp-orm.pds.public_service', 'https://public.api.bsky.app');
+            $pds = config('atp-support.public_api', 'https://public.api.bsky.app');
         }
 
         $client = Atp::public($pds);
