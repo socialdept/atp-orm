@@ -493,4 +493,4 @@ ORM is open-source software licensed under the [MIT license](LICENSE).
 
 ---
 
-**Built for the Social Web** &bull; By Social Dept.
+**Built for the Atmosphere** &bull; By Social Dept.
