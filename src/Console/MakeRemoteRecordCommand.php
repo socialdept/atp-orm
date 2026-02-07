@@ -5,12 +5,14 @@ namespace SocialDept\AtpOrm\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use SocialDept\AtpOrm\Support\RecordClassResolver;
+use SocialDept\AtpSchema\Support\PathHelper;
 
 class MakeRemoteRecordCommand extends Command
 {
     protected $signature = 'make:remote-record
         {name : The name of the remote record class}
-        {--collection= : The AT Protocol collection NSID}';
+        {--collection= : The AT Protocol collection NSID}
+        {--no-dto : Skip DTO generation and use class discovery only}';
 
     protected $description = 'Create a new remote record class';
 
@@ -20,7 +22,7 @@ class MakeRemoteRecordCommand extends Command
         $collection = $this->option('collection') ?? $this->askForCollection($name);
 
         $path = config('atp-orm.generators.path', 'app/Remote');
-        $namespace = $this->pathToNamespace($path);
+        $namespace = PathHelper::pathToNamespace($path);
 
         $stub = $this->getStub();
         $stub = str_replace('{{ namespace }}', $namespace, $stub);
@@ -66,11 +68,6 @@ class MakeRemoteRecordCommand extends Command
         return $this->ask('What is the AT Protocol collection NSID?', $guess);
     }
 
-    protected function pathToNamespace(string $path): string
-    {
-        return str_replace('/', '\\', Str::studly($path));
-    }
-
     protected function resolveRecordClass(string $collection): string
     {
         $resolved = RecordClassResolver::resolve($collection);
@@ -79,8 +76,22 @@ class MakeRemoteRecordCommand extends Command
             return $resolved;
         }
 
+        if (! $this->option('no-dto')) {
+            $this->info("Generating DTO for [{$collection}]...");
+
+            $this->callSilently('schema:generate', ['nsid' => $collection]);
+
+            $resolved = RecordClassResolver::resolve($collection);
+
+            if ($resolved) {
+                return $resolved;
+            }
+
+            $this->warn("DTO generation did not produce a discoverable class for [{$collection}]. Falling back to namespace convention.");
+        }
+
         // Fall back to the pre-generated namespace convention
-        $generatedNamespace = config('atp-orm.generated.schema_namespace', 'SocialDept\\AtpSchema\\Generated');
+        $generatedNamespace = config('atp-schema.generated.namespace', 'SocialDept\\AtpSchema\\Generated');
         $classPath = collect(explode('.', $collection))
             ->map(fn (string $part) => Str::studly($part))
             ->implode('\\');

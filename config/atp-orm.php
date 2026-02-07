@@ -60,25 +60,6 @@ return [
         'public_service' => env('ATP_PUBLIC_SERVICE_URL', 'https://public.api.bsky.app'),
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Record Class Resolution
-    |--------------------------------------------------------------------------
-    |
-    | Configure how collection NSIDs are resolved to PHP Data classes.
-    | The resolver checks namespaces in order — app lexicons first, then
-    | the bundled pre-generated classes from atp-schema.
-    |
-    */
-
-    'generated' => [
-        // Namespace for app-level lexicon classes (checked first)
-        'app_namespace' => env('ATP_ORM_APP_NAMESPACE', 'App\\Lexicons'),
-
-        // Namespace for bundled pre-generated classes (checked second)
-        'schema_namespace' => env('ATP_ORM_SCHEMA_NAMESPACE', 'SocialDept\\AtpSchema\\Generated'),
-    ],
-
     'generators' => [
         'path' => 'app/Remote',
     ],

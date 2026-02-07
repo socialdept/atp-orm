@@ -3,6 +3,7 @@
 namespace SocialDept\AtpOrm\Support;
 
 use Illuminate\Support\Str;
+use SocialDept\AtpSchema\Support\PathHelper;
 
 class RecordClassResolver
 {
@@ -17,7 +18,7 @@ class RecordClassResolver
             ->implode('\\');
 
         // 1. Check app lexicons namespace first
-        $appNamespace = config('atp-orm.generated.app_namespace', 'App\\Lexicons');
+        $appNamespace = PathHelper::pathToNamespace(config('atp-schema.generators.lexicon_path', 'app/Lexicons'));
         $appClass = $appNamespace.'\\'.$classPath;
 
         if (class_exists($appClass)) {
@@ -25,7 +26,7 @@ class RecordClassResolver
         }
 
         // 2. Check pre-generated namespace
-        $generatedNamespace = config('atp-orm.generated.schema_namespace', 'SocialDept\\AtpSchema\\Generated');
+        $generatedNamespace = config('atp-schema.generated.namespace', 'SocialDept\\AtpSchema\\Generated');
         $generatedClass = $generatedNamespace.'\\'.$classPath;
 
         if (class_exists($generatedClass)) {
