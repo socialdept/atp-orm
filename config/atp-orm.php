@@ -47,6 +47,21 @@ return [
 
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Record Source
+    |--------------------------------------------------------------------------
+    |
+    | Where to fetch individual records from. Options:
+    | - 'pds': Fetch directly from the user's Personal Data Server (default)
+    | - 'slingshot': Fetch from Slingshot cache (faster, but may be stale)
+    |
+    | You can also override per-query with ->viaSlingshot() on the builder.
+    |
+    */
+
+    'record_source' => env('ATP_ORM_RECORD_SOURCE', 'pds'),
+
     'query' => [
         'default_limit' => 50,
         'max_limit' => 100,
