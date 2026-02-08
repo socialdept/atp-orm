@@ -18,7 +18,7 @@
         "socialdept/atp-cbor": "^0.1",
         "socialdept/atp-client": "^0.1",
         "socialdept/atp-schema": "^0.4",
-        "socialdept/atp-support": "^0.1"
+        "socialdept/atp-support": "^0.1 || ^0.2"
     },
     "require-dev": {
         "mockery/mockery": "^1.6",
