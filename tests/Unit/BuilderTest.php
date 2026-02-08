@@ -9,6 +9,7 @@ use SocialDept\AtpClient\Data\Responses\Atproto\Repo\ListRecordsResponse;
 use SocialDept\AtpOrm\Contracts\CacheProvider;
 use SocialDept\AtpOrm\Exceptions\ReadOnlyException;
 use SocialDept\AtpOrm\Exceptions\RecordNotFoundException;
+use SocialDept\AtpOrm\Loader\SlingshotLoader;
 use SocialDept\AtpOrm\Providers\ArrayCacheProvider;
 use SocialDept\AtpOrm\Query\Builder;
 use SocialDept\AtpOrm\RemoteCollection;
@@ -305,5 +306,62 @@ class BuilderTest extends TestCase
         $this->assertNull($this->cache->get('atp-orm:app.bsky.feed.post:did:plc:abc:rk1'));
         $this->assertNull($this->cache->get('atp-orm:app.bsky.feed.post:did:plc:abc:list:hash'));
         $this->assertSame('kept', $this->cache->get('atp-orm:other.collection:did:plc:abc:rk1'));
+    }
+
+    public function test_via_slingshot_find(): void
+    {
+        $slingshotLoader = Mockery::mock(SlingshotLoader::class);
+        $slingshotLoader->shouldReceive('getRecord')
+            ->once()
+            ->with('did:plc:abc', 'app.bsky.feed.post', 'rk1')
+            ->andReturn([
+                'uri' => 'at://did:plc:abc/app.bsky.feed.post/rk1',
+                'cid' => 'cid1',
+                'value' => ['text' => 'Via Slingshot', 'createdAt' => '2024-01-01T00:00:00Z'],
+            ]);
+
+        $this->app->instance(SlingshotLoader::class, $slingshotLoader);
+
+        $result = FakePost::for('did:plc:abc')->viaSlingshot()->find('rk1');
+
+        $this->assertInstanceOf(FakePost::class, $result);
+        $this->assertSame('Via Slingshot', $result->text);
+        $this->assertSame('rk1', $result->getRkey());
+    }
+
+    public function test_via_slingshot_returns_null_on_error(): void
+    {
+        $slingshotLoader = Mockery::mock(SlingshotLoader::class);
+        $slingshotLoader->shouldReceive('getRecord')
+            ->once()
+            ->andThrow(new \RuntimeException('Not found'));
+
+        $this->app->instance(SlingshotLoader::class, $slingshotLoader);
+
+        $result = FakePost::for('did:plc:abc')->viaSlingshot()->find('notfound');
+
+        $this->assertNull($result);
+    }
+
+    public function test_config_record_source_slingshot(): void
+    {
+        $this->app['config']->set('atp-orm.record_source', 'slingshot');
+
+        $slingshotLoader = Mockery::mock(SlingshotLoader::class);
+        $slingshotLoader->shouldReceive('getRecord')
+            ->once()
+            ->with('did:plc:abc', 'app.bsky.feed.post', 'rk1')
+            ->andReturn([
+                'uri' => 'at://did:plc:abc/app.bsky.feed.post/rk1',
+                'cid' => 'cid1',
+                'value' => ['text' => 'Config Slingshot', 'createdAt' => '2024-01-01T00:00:00Z'],
+            ]);
+
+        $this->app->instance(SlingshotLoader::class, $slingshotLoader);
+
+        $result = FakePost::for('did:plc:abc')->find('rk1');
+
+        $this->assertInstanceOf(FakePost::class, $result);
+        $this->assertSame('Config Slingshot', $result->text);
     }
 }

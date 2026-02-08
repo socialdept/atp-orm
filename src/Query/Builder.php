@@ -37,6 +37,8 @@ class Builder
 
     protected bool $useRepo = false;
 
+    protected bool $useSlingshot = false;
+
     /** @var array<string, AtpClient> */
     protected static array $clientCache = [];
 
@@ -116,6 +118,13 @@ class Builder
         return $this;
     }
 
+    public function viaSlingshot(): static
+    {
+        $this->useSlingshot = true;
+
+        return $this;
+    }
+
     public function get(): RemoteCollection
     {
         $instance = new $this->remoteRecordClass();
@@ -144,15 +153,25 @@ class Builder
             }
         }
 
-        $pds = $this->resolvePds();
-        $client = $this->publicClient($pds);
-
         try {
-            $response = $client->atproto->repo->getRecord(
-                $this->did,
-                $collection,
-                $rkey,
-            );
+            if ($this->shouldUseSlingshot()) {
+                $loader = app(\SocialDept\AtpOrm\Loader\SlingshotLoader::class);
+                $response = $loader->getRecord($this->did, $collection, $rkey);
+                $value = $response['value'];
+                $uri = $response['uri'];
+                $cid = $response['cid'];
+            } else {
+                $pds = $this->resolvePds();
+                $client = $this->publicClient($pds);
+                $response = $client->atproto->repo->getRecord(
+                    $this->did,
+                    $collection,
+                    $rkey,
+                );
+                $value = $response->value;
+                $uri = $response->uri;
+                $cid = $response->cid;
+            }
         } catch (\Throwable) {
             return null;
         }
@@ -160,9 +179,9 @@ class Builder
         $hydrator = $this->hydrator();
         $record = $hydrator->hydrateOne(
             $this->remoteRecordClass,
-            $response->value,
-            $response->uri,
-            $response->cid,
+            $value,
+            $uri,
+            $cid,
             $this->authenticatedDid,
         );
 
@@ -330,6 +349,17 @@ class Builder
         }
 
         return $result;
+    }
+
+    protected function shouldUseSlingshot(): bool
+    {
+        if ($this->useSlingshot) {
+            return true;
+        }
+
+        $source = config('atp-orm.record_source', 'pds');
+
+        return $source === 'slingshot';
     }
 
     protected function resolvePds(): string

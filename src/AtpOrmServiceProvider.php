@@ -7,6 +7,7 @@ use SocialDept\AtpOrm\Cache\CacheKeyGenerator;
 use SocialDept\AtpOrm\Console\MakeRemoteRecordCommand;
 use SocialDept\AtpOrm\Contracts\CacheProvider;
 use SocialDept\AtpOrm\Loader\RepoLoader;
+use SocialDept\AtpOrm\Loader\SlingshotLoader;
 use SocialDept\AtpOrm\Support\RecordHydrator;
 
 class AtpOrmServiceProvider extends ServiceProvider
@@ -28,6 +29,7 @@ class AtpOrmServiceProvider extends ServiceProvider
         });
 
         $this->registerRepoLoader();
+        $this->registerSlingshotLoader();
     }
 
     public function boot(): void
@@ -42,6 +44,15 @@ class AtpOrmServiceProvider extends ServiceProvider
     protected function registerRepoLoader(): void
     {
         $this->app->singleton(RepoLoader::class);
+    }
+
+    protected function registerSlingshotLoader(): void
+    {
+        $this->app->singleton(SlingshotLoader::class, function ($app) {
+            return new SlingshotLoader(
+                $app->make(\SocialDept\AtpSupport\Microcosm\SlingshotClient::class),
+            );
+        });
     }
 
     protected function registerCacheInvalidationSignal(): void
@@ -86,6 +97,7 @@ class AtpOrmServiceProvider extends ServiceProvider
             RecordHydrator::class,
             CacheProvider::class,
             RepoLoader::class,
+            SlingshotLoader::class,
         ];
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use JsonSerializable;
 use SocialDept\AtpOrm\Concerns\HasAttributes;
+use SocialDept\AtpOrm\Concerns\HasBacklinks;
 use SocialDept\AtpOrm\Concerns\HasEvents;
 use SocialDept\AtpOrm\Events\RecordCreated;
 use SocialDept\AtpOrm\Events\RecordDeleted;
@@ -23,6 +24,7 @@ use SocialDept\AtpSchema\Data\Data;
 abstract class RemoteRecord implements Arrayable, ArrayAccess, Jsonable, JsonSerializable
 {
     use HasAttributes;
+    use HasBacklinks;
     use HasEvents;
 
     protected string $collection;
