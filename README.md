@@ -28,6 +28,8 @@ Think of it as Eloquent, but for the AT Protocol.
 - **Type-safe** - Backed by [`atp-schema`](https://github.com/socialdept/atp-schema) generated DTOs with full property access
 - **Read & write** - Fetch, create, update, and delete records with authentication
 - **Dirty tracking** - Track attribute changes just like Eloquent
+- **Backlink discovery** - Find all records that link to a given record via [Microcosm](https://microcosm.blue)
+- **Slingshot support** - Optionally fetch records from Slingshot cache instead of PDS
 - **Events** - Laravel events for record lifecycle hooks
 - **Zero config** - Works out of the box with sensible defaults
 
@@ -305,6 +307,145 @@ $allPosts = Post::for($did)->fromRepo()->get();
 
 This uses `com.atproto.sync.getRepo` to fetch the repository as a CAR file and extract records locally — significantly faster for large collections.
 
+## Backlink Queries
+
+ORM integrates with [Microcosm's Constellation](https://microcosm.blue) to discover all records that link to a given record across the entire AT Protocol network.
+
+### Basic Usage
+
+```php
+$post = Post::for('did:plc:abc')->find('rk1');
+
+// Get all likes on this post
+$likes = $post->backlinks()->likes();
+
+echo $likes->total();  // 2852
+echo $likes->count();  // Items in this page
+
+foreach ($likes as $ref) {
+    echo $ref->did;    // Who liked it
+    echo $ref->uri();  // at://did/app.bsky.feed.like/rkey
+}
+```
+
+### Convenience Methods
+
+Common Bluesky interaction types have built-in shortcuts:
+
+```php
+$post->backlinks()->likes();      // app.bsky.feed.like -> subject.uri
+$post->backlinks()->quotes();     // app.bsky.feed.post -> embed.record.uri
+$post->backlinks()->replies();    // app.bsky.feed.post -> reply.parent.uri
+$post->backlinks()->reposts();    // app.bsky.feed.repost -> subject.uri
+$post->backlinks()->mentions();   // app.bsky.feed.post -> facets[...].features[...mention].did
+$post->backlinks()->followers();  // app.bsky.graph.follow -> subject
+```
+
+### Custom Sources
+
+Query any collection and field path using `source()`:
+
+```php
+// Find all records in a custom collection that link to this post
+$backlinks = $post->backlinks()
+    ->source('com.example.bookmark', 'post.uri')
+    ->limit(50)
+    ->reverse()
+    ->get();
+```
+
+The source format is `collection:path` where the path is the dot-notation location of the linking field within the record.
+
+### Standalone Queries
+
+You don't need a `RemoteRecord` instance to query backlinks:
+
+```php
+use SocialDept\AtpOrm\Backlinks\BacklinkQuery;
+
+// Find followers of a DID
+$followers = BacklinkQuery::for('did:plc:abc')
+    ->source('app.bsky.graph.follow', 'subject')
+    ->get();
+
+// Get a count
+$likeCount = BacklinkQuery::for('at://did:plc:abc/app.bsky.feed.post/rk1')
+    ->source('app.bsky.feed.like', 'subject.uri')
+    ->count();
+```
+
+### Link Summary
+
+Get a summary of all link types pointing at a target at once:
+
+```php
+$summary = $post->backlinks()->all();
+
+// Returns LinkSummary with nested structure:
+// app.bsky.feed.like -> .subject.uri -> { records: 2852, distinct_dids: 2852 }
+// app.bsky.feed.post -> .embed.record.uri -> { records: 1143, distinct_dids: 1123 }
+// app.bsky.feed.repost -> .subject.uri -> { records: 320, distinct_dids: 320 }
+
+$summary->total();                              // 7205
+$summary->forCollection('app.bsky.feed.like');  // Filter to a single collection
+```
+
+### Pagination
+
+Backlink queries support cursor-based pagination:
+
+```php
+$likes = $post->backlinks()->likes();
+
+while ($likes->hasMorePages()) {
+    $likes = $likes->nextPage();
+}
+```
+
+### Hydration
+
+Hydrate backlink references into full `RemoteRecord` instances via Slingshot:
+
+```php
+$hydrated = $post->backlinks()
+    ->source('app.bsky.feed.like', 'subject.uri')
+    ->hydrate(Like::class);
+
+// Returns RemoteCollection of Like instances
+foreach ($hydrated as $like) {
+    echo $like->subject; // Full record data
+}
+```
+
+### BacklinkCollection Helpers
+
+```php
+$likes = $post->backlinks()->likes();
+
+$likes->uris();     // Collection of AT-URIs
+$likes->dids();     // Collection of unique DIDs
+$likes->toArray();  // Array of {did, collection, rkey, uri}
+$likes->filter(fn ($ref) => $ref->did === 'did:plc:abc');
+```
+
+## Slingshot Record Source
+
+By default, ORM fetches records directly from the user's PDS. You can optionally route through [Slingshot](https://microcosm.blue) for faster cached reads:
+
+```php
+// Per-query
+$post = Post::for('did:plc:abc')->viaSlingshot()->find('rk1');
+```
+
+Or set it globally in config:
+
+```php
+// config/atp-orm.php
+'record_source' => env('ATP_ORM_RECORD_SOURCE', 'pds'), // 'pds' or 'slingshot'
+```
+
+Slingshot returns the same record data as the PDS, but from a globally distributed cache. Records may be slightly stale compared to direct PDS reads.
+
 ## Events
 
 ORM fires Laravel events for record lifecycle changes:
@@ -380,6 +521,9 @@ Customize behavior in `config/atp-orm.php`:
 return [
     // Cache provider class (LaravelCacheProvider, FileCacheProvider, or ArrayCacheProvider)
     'cache_provider' => \SocialDept\AtpOrm\Providers\LaravelCacheProvider::class,
+
+    // Record source: 'pds' (default) or 'slingshot' (Microcosm cache)
+    'record_source' => env('ATP_ORM_RECORD_SOURCE', 'pds'),
 
     'cache' => [
         'default_ttl' => 300,      // 5 minutes (0 = no caching)
@@ -461,9 +605,9 @@ Use the `ArrayCacheProvider` in tests for fast, isolated caching:
 
 - PHP 8.2+
 - Laravel 11+
-- [socialdept/atp-client](https://github.com/socialdept/atp-client)
-- [socialdept/atp-schema](https://github.com/socialdept/atp-schema)
-- [socialdept/atp-resolver](https://github.com/socialdept/atp-resolver)
+- [socialdept/atp-support](https://github.com/socialdept/atp-support) - Identity resolution, Microcosm clients
+- [socialdept/atp-client](https://github.com/socialdept/atp-client) - Authenticated AT Protocol HTTP client
+- [socialdept/atp-schema](https://github.com/socialdept/atp-schema) - Lexicon parsing and DTO generation
 
 ### Optional
 
