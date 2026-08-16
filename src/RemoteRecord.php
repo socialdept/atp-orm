@@ -14,8 +14,8 @@ use SocialDept\AtpOrm\Events\RecordDeleted;
 use SocialDept\AtpOrm\Events\RecordUpdated;
 use SocialDept\AtpOrm\Exceptions\ReadOnlyException;
 use SocialDept\AtpOrm\Query\Builder;
-use SocialDept\AtpSupport\AtUri;
 use SocialDept\AtpSchema\Data\Data;
+use SocialDept\AtpSupport\AtUri;
 
 /**
  * @implements ArrayAccess<string, mixed>
